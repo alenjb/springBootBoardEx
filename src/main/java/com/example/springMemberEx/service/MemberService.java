@@ -4,9 +4,11 @@ import com.example.springMemberEx.dto.MemberDTO;
 import com.example.springMemberEx.entity.MemberEntity;
 import com.example.springMemberEx.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.javassist.compiler.ast.Member;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Member;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,5 +47,39 @@ public class MemberService {
             //조회 결과가 없다(해당 이메일을 가진 회원이 없다)
             return null;
         }
+    }
+
+    public List<MemberDTO> findAll() {
+        List<MemberEntity> memberEntityList = memberRepository.findAll();
+        List<MemberDTO> memberDTOList = new ArrayList<>();
+        for(MemberEntity memberEntity: memberEntityList){
+            memberDTOList.add(MemberDTO.toMemberDTO(memberEntity));
+        }
+        return memberDTOList;
+    }
+
+    public MemberDTO findById(Long id) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
+        if(optionalMemberEntity.isPresent()){
+            return MemberDTO.toMemberDTO(optionalMemberEntity.get());
+        }else {
+            return null;
+        }
+    }
+
+    public MemberDTO updateForm(String myEmail) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(myEmail);
+        if(optionalMemberEntity.isPresent()){
+            return MemberDTO.toMemberDTO(optionalMemberEntity.get());
+        }else {
+            return null;
+        }
+    }
+    public void update(MemberDTO memberDTO){
+        memberRepository.save(MemberEntity.toUpdateMemberEntity(memberDTO));
+    }
+
+    public void deleteById(Long id) {
+        memberRepository.deleteById(id);
     }
 }

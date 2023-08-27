@@ -93,5 +93,13 @@ public class MemberController {
         return "index";
     }
 
+    //ajax에서는 리턴타입에 responsebody 붙여야함
+    @PostMapping("/member/email-check")
+    public @ResponseBody String emailCheck(@RequestParam("memberEmail") String memberEmail){
+        System.out.println("memberEmail = " + memberEmail);
+        String checkResult = memberService.emailCheck(memberEmail);
+        return checkResult;
+    }
+
 
 }

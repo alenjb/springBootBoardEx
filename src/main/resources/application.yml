@@ -9,7 +9,8 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create
+      #ddl auto를 create로 하면 실행할 때마다 DB가 초기화됨
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false
@@ -17,3 +18,4 @@ spring:
     properties:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+      spring.jpa.defer-datasource-initialization: true
